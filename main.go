@@ -43,7 +43,7 @@ func main() {
 
 	// CORS Configuration
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8080", "http://localhost:8181"},
+		AllowedOrigins:   []string{"http://localhost:8080", "http://localhost:8181", "https://frontend-production-0b1d.up.railway.app"},
 		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE"},
 		AllowCredentials: true,
 	})
