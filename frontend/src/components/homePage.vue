@@ -11,7 +11,7 @@
       <input 
         v-model="searchQuery" 
         type="text" 
-        placeholder="Search by name or transaction number" 
+        placeholder="name or transaction number" 
         class="bg-black text-white placeholder-gray-500 px-4 py-2 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600" />
     </header>
     <div class="table-wrapper">
