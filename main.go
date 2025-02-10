@@ -5,6 +5,7 @@ import (
 	"log"
 	"main/API/controller"
 	"net/http"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -14,11 +15,7 @@ import (
 func main() {
 	router := mux.NewRouter()
 
-	//Note untuk UserType
-	//0 = User biasa
-	//1 = Admin
-
-	// Handler untuk barang
+	// Handlers
 	router.HandleFunc("/barang", controller.GetAllBarang).Methods("GET")
 	router.HandleFunc("/barang/{id}", controller.GetBarang).Methods("GET")
 	router.HandleFunc("/barang", controller.InsertBarang).Methods("POST")
@@ -44,6 +41,7 @@ func main() {
 	router.HandleFunc("/salesDet/{id}", controller.UpdateSalesDetail).Methods("PUT")
 	router.HandleFunc("/salesDet/{id}", controller.DeleteSalesDetail).Methods("DELETE")
 
+	// CORS Configuration
 	corsHandler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://localhost:8080", "http://localhost:8181"},
 		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE"},
@@ -52,8 +50,14 @@ func main() {
 
 	handler := corsHandler.Handler(router)
 
-	fmt.Println("Connected to port 8181")
-	log.Println("Connected to port 8181")
+	// 🔹 Set port dynamically using an environment variable
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8181" // Default to 8181 if PORT is not set
+	}
 
-	log.Fatal(http.ListenAndServe(":8181", handler))
+	fmt.Println("Connected to port", port)
+	log.Println("Connected to port", port)
+
+	log.Fatal(http.ListenAndServe(":"+port, handler))
 }

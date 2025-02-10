@@ -185,7 +185,8 @@
   import { ref, onMounted, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router'
 
-  
+  const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8181"; // Default to localhost for development
+
   const route = useRoute()
   const router = useRouter()
   const idEdit = route.params.id 
@@ -194,14 +195,14 @@
   const salesDetailData = ref([]);
 
   async function getAllTransaction() {
-    var query = 'http://localhost:8181/sales/' + idEdit;
+    var query = apiUrl + '/sales/' + idEdit;
     const response = await fetch(query, { method: "GET", headers: { "Content-Type": "application/x-www-form-urlencoded" } });
     if (response.ok) {
         const data = await response.json();
         if (data.status == '200') {
             salesData.value = data.data;
 
-            var queryDetail = 'http://localhost:8181/salesDetSpec/' + idEdit;
+            var queryDetail = apiUrl +'/salesDetSpec/' + idEdit;
             const responseDetail = await fetch(queryDetail, { method: "GET", headers: { "Content-Type": "application/x-www-form-urlencoded" } });
 
             if (responseDetail.ok) {
@@ -306,7 +307,7 @@
     }
 
     console.log(`Deleting existing sales details for salesID: ${idEdit}`);
-    const deleteDetailResponse = await fetch(`http://localhost:8181/salesDet/` + idEdit, {
+    const deleteDetailResponse = await fetch(apiUrl+ `/salesDet/` + idEdit, {
         method: "DELETE",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
@@ -314,7 +315,7 @@
     if (deleteDetailResponse.ok) {
         const deleteDetail = await deleteDetailResponse.json();
         if (deleteDetail.status == '200') {
-            const deleteSalesResponse = await fetch(`http://localhost:8181/sales/` + idEdit, {
+            const deleteSalesResponse = await fetch(apiUrl + `/sales/` + idEdit, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
             });
@@ -337,7 +338,7 @@
 
 
   async function getAllCustomer() {
-    var query = 'http://localhost:8181/customer';
+    var query = apiUrl+ '/customer';
     const response = await fetch(query, { method: "GET", headers: { "Content-Type": "application/x-www-form-urlencoded" } });
     if (response.ok) {
       const data = await response.json();
@@ -350,7 +351,7 @@
   }
   
   async function getAllBarang() {
-    var query = 'http://localhost:8181/barang';
+    var query = apiUrl + '/barang';
     const response = await fetch(query, { method: "GET", headers: { "Content-Type": "application/x-www-form-urlencoded" } });
     if (response.ok) {
       const data = await response.json();
@@ -398,7 +399,7 @@
             total: totalBayar.value,
         });
 
-        const salesResponse = await fetch(`http://localhost:8181/sales/` + idEdit, {
+        const salesResponse = await fetch(apiUrl + `/sales/` + idEdit, {
             method: "PUT",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: formDataSales,
@@ -408,7 +409,7 @@
         console.log("Sales API Response:", salesDataResponse);
 
         console.log(`Deleting existing sales details for salesID: ${idEdit}`);
-        const deleteResponse = await fetch(`http://localhost:8181/salesDet/`+ idEdit, {
+        const deleteResponse = await fetch(apiUrl +`/salesDet/`+ idEdit, {
             method: "DELETE",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });
@@ -428,7 +429,7 @@
                 total: row.total,
             });
 
-            const insertResponse = await fetch("http://localhost:8181/salesDet", {
+            const insertResponse = await fetch(apiUrl + "/salesDet", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: formDataSalesDetail,
