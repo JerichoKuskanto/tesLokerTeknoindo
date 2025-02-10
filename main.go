@@ -53,7 +53,7 @@ func main() {
 	// 🔹 Set port dynamically using an environment variable
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8181" // Default to 8181 if PORT is not set
+		port = "8080" // Default to 8181 if PORT is not set
 	}
 
 	fmt.Println("Connected to port", port)

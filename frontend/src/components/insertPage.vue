@@ -178,7 +178,11 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router'
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8181"; // Default to localhost for development
+const apiUrl = process.env.VUE_APP_API_URL;
+
+if (!apiUrl) {
+  throw new Error("VUE_APP_API_URL is not set in the environment variables!");
+}
 
 const router = useRouter()
 
