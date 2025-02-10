@@ -65,7 +65,11 @@ import { ref, computed, onMounted } from 'vue';
 const transactionsData = ref([]);
 
 onMounted(getTransactionData);
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8181"; // Default to localhost for development
+const apiUrl = process.env.VUE_APP_API_URL;
+
+if (!apiUrl) {
+  throw new Error("VUE_APP_API_URL is not set in the environment variables!");
+}
 
 async function getTransactionData() {
   const transactions = ref([]);
