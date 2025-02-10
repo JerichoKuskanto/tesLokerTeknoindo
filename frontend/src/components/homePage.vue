@@ -65,10 +65,14 @@ import { ref, computed, onMounted } from 'vue';
 const transactionsData = ref([]);
 
 onMounted(getTransactionData);
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8181"; // Default to localhost for development
 
 async function getTransactionData() {
   const transactions = ref([]);
-  var query = 'http://localhost:8181/sales';
+
+  
+
+  var query = apiUrl + '/sales';
   const response = await fetch(query, {
       method: "GET",
       headers: {
@@ -82,7 +86,7 @@ async function getTransactionData() {
           for (const key in data.data) {
               let sale = data.data[key];
               sale.tgl = dateTimeFormatter(sale.tgl);
-              let custQuery = `http://localhost:8181/customer/${sale.custID}`;
+              let custQuery = apiUrl+`/customer/${sale.custID}`;
               const custResponse = await fetch(custQuery, {
                   method: "GET",
                   headers: {
@@ -97,7 +101,7 @@ async function getTransactionData() {
                   }
               }
 
-              let salesDetQuery = `http://localhost:8181/salesDetSpec/${sale.salesID}`;
+              let salesDetQuery = apiUrl+`/salesDetSpec/${sale.salesID}`;
               const salesDetResponse = await fetch(salesDetQuery, {
                   method: "GET",
                   headers: {

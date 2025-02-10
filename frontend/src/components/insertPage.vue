@@ -178,7 +178,9 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router'
 
-  const router = useRouter()
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8181"; // Default to localhost for development
+
+const router = useRouter()
 
 const tanggal = ref("");
 const selectedCustomer = ref("");
@@ -238,7 +240,7 @@ function formatRupiah(value){
 
 
 async function getAllCustomer() {
-  var query = 'http://localhost:8181/customer';
+  var query = apiUrl+'/customer';
   const response = await fetch(query, { method: "GET", headers: { "Content-Type": "application/x-www-form-urlencoded" } });
   if (response.ok) {
     const data = await response.json();
@@ -251,7 +253,7 @@ async function getAllCustomer() {
 }
 
 async function getAllBarang() {
-  var query = 'http://localhost:8181/barang';
+  var query = apiUrl+'/barang';
   const response = await fetch(query, { method: "GET", headers: { "Content-Type": "application/x-www-form-urlencoded" } });
   if (response.ok) {
     const data = await response.json();
@@ -300,7 +302,7 @@ async function submitForm() {
     });
 
     // Send Sales Data
-    const salesResponse = await fetch("http://localhost:8181/sales", {
+    const salesResponse = await fetch(apiUrl+"/sales", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: formDataSales,
@@ -328,7 +330,7 @@ async function submitForm() {
         total: row.total,
       });
 
-      await fetch("http://localhost:8181/salesDet", {
+      await fetch(apiUrl+"/salesDet", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formDataSalesDetail,
